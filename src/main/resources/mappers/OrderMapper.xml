@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+	"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<!-- namespace：匹配的Java接口 -->
+<mapper namespace="cn.tedu.store5.mapper.OrderMapper">
+
+	<!-- 根据将要执行的SQL语句的类型选择节点 -->
+	<!-- id：对应的抽象方法的方法名 -->
+	<!-- 在SQL语句中的?应该使用#{}来占位 -->
+	<!-- 在#{}中的名称是参数User类中的属性名 -->
+
+	
+	<!-- 插入信息至用户订单表 -->
+	<!-- Integer insertOrder(Order order); -->
+	<!--  useGeneratedKeys="true" keyProperty="oid"当数据插入成功以后，会自动将oid数据放入order对象中去s -->
+	<insert id="insertOrder" useGeneratedKeys="true" keyProperty="oid">
+		insert into t_order values(
+		null,
+		#{uid},
+		#{name},
+		#{phone},
+		#{address},
+		#{status},
+		#{price},
+		#{order_time},
+		#{pay_time},
+		#{createUser},
+		#{createTime},
+		#{modifiedUser},
+		#{modifiedTime}
+		)
+	</insert>
+	<!-- 插入信息至用户订单商品表 -->
+	<!-- Integer insertOrderItem(OrderItem orderItem); -->
+	<insert id="insertOrderItem">
+		insert into t_order_item values(
+		null,
+		#{oid},
+		#{gid},
+		#{title},
+		#{image},
+		#{price},
+		#{num},
+		#{createUser},
+		#{createTime},
+		#{modifiedUser},
+		#{modifiedTime}
+		)
+	</insert>
+	
+</mapper>
+
+
+
+
+
+

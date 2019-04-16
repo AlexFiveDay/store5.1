@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+	"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<!-- namespace：匹配的Java接口 -->
+<mapper namespace="cn.tedu.store5.mapper.AddressMapper">
+
+	<!-- 根据将要执行的SQL语句的类型选择节点 -->
+	<!-- id：对应的抽象方法的方法名 -->
+	<!-- 在SQL语句中的?应该使用#{}来占位 -->
+	<!-- 在#{}中的名称是参数User类中的属性名 -->
+
+	<!-- 查询用户收货地址信息条数 -->
+	<!-- Integer countByUid(Integer uid); -->
+	<select id="countByUid" resultType="java.lang.Integer">
+		select count(aid) from
+		t_address
+		where uid=#{uid}
+	</select>
+	<!-- 插入用户收货地址数据 -->
+	<!-- Integer insert(Address adress); -->
+	<insert id="insert">
+		insert into t_address values(
+		null,
+		#{uid},
+		#{name},
+		#{province},
+		#{city},
+		#{area},
+		#{district},
+		#{zip},
+		#{address},
+		#{phone},
+		#{tel},
+		#{tag},
+		#{isDefault},
+		#{createUser},
+		#{createTime},
+		#{modifiedUser},
+		#{modifiedTime}
+		)
+	</insert>
+	<!-- 查询用户的收货地址信息 -->
+	<select id="findByUid"
+		resultType="cn.tedu.store5.entity.Address">
+		select aid,tag,name,district,address,phone,is_default
+		isDefault
+		from t_address
+		where uid=#{uid}
+		order by is_default desc,modified_time desc;
+	</select>
+	<!-- 通过aid查询需要设为默认地址的那条收货数据 -->
+	<!-- Address findByAid(Integer aid); -->
+	<select id="findByAid"
+		resultType="cn.tedu.store5.entity.Address">
+		select uid,is_default isDefault
+		from t_address
+		where aid=#{aid}
+	</select>
+	<!-- 把所有该用户uid的收货地址都设为不默认 -->
+	<!-- Integer updateNonDefault(Integer uid); -->
+	<update id="updateNonDefault">
+		update t_address set is_default=0 where uid=#{uid};
+	</update>
+	<!-- 设置该用户指定aid的收货地址为默认值 -->
+	<!-- Integer updateDefault(Integer aid); -->
+	<update id="updateDefault">
+		update t_address set is_default=1 where aid=#{aid};
+	</update>
+	<!-- 删除该用户指定aid的收货地址 -->
+	<!-- Integer deleteAddress(Integer aid); -->
+	<delete id="deleteAddress">
+		DELETE FROM t_address WHERE aid=#{aid};
+	</delete>
+	<!-- 查找最近被修改的过的地址 -->
+	<!-- Address getByUid(Integer uid); -->
+	<select id="getByUid"
+		resultType="cn.tedu.store5.entity.Address">
+		select aid
+		from t_address
+		where uid=#{uid}
+		order by modified_time desc,aid desc
+		limit 0,1;
+	</select>
+</mapper>
+
+
+
+
+
+

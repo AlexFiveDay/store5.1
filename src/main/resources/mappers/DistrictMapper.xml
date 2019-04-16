@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+	"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<!-- namespace：匹配的Java接口 -->
+<mapper namespace="cn.tedu.store5.mapper.DistrictMapper">
+
+	<!-- 根据将要执行的SQL语句的类型选择节点 -->
+	<!-- id：对应的抽象方法的方法名 -->
+	<!-- 在SQL语句中的?应该使用#{}来占位 -->
+	<!-- 在#{}中的名称是参数User类中的属性名 -->
+
+	<!-- 根据省市区的代号查询地址选择列表的数据 -->
+	<!-- Integer insert(User user) -->
+	<select id="findByParent"
+		resultType="cn.tedu.store5.entity.District">
+		select code,name from t_dict_district
+		where parent=#{parent}
+		order by code ;
+	</select>
+	
+	<select id="findByCode"
+		resultType="cn.tedu.store5.entity.District">
+		select name from t_dict_district
+		where code=#{code}
+	</select>
+	
+	
+</mapper>
+
+
+
+
+
+

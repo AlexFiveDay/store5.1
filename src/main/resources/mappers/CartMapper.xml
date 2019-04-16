@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+	"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<!-- namespace：匹配的Java接口 -->
+<mapper namespace="cn.tedu.store5.mapper.CartMapper">
+
+	<!-- 根据将要执行的SQL语句的类型选择节点 -->
+	<!-- id：对应的抽象方法的方法名 -->
+	<!-- 在SQL语句中的?应该使用#{}来占位 -->
+	<!-- 在#{}中的名称是参数User类中的属性名 -->
+
+	<!-- 获取某用户在购物车中添加的指定的商品的数据 -->
+	<!-- Integer findByUidAndGid(@Param("uid")Integer uid,@Param("gid")Long 
+		gid); -->
+	<select id="findByUidAndGid"
+		resultType="cn.tedu.store5.entity.Cart">
+		select cid,num from
+		t_cart
+		where uid=#{uid} and gid=#{gid};
+	</select>
+	<!-- 插入购物车中新商品的数据 -->
+	<!-- Integer insertCart(Cart cart); -->
+	<insert id="insertCart">
+		insert into t_cart
+		values(null,#{uid},#{gid},#{num},#{createUser},#{createTime},#{modifiedUser},#{modifiedTime});
+	</insert>
+	<!-- 购物车中已存在的商品数量更新 -->
+	<!-- Integer updateNum(@Param("cid")Integer cid,@Param("num")Integer num); -->
+	<update id="updateNum">
+		update t_cart set
+		num=#{num},modified_user=#{modifiedUser},modified_time=#{modifiedTime}
+		where cid=#{cid};
+	</update>
+	<!-- 查找cart表中用户购物车中商品数据 -->
+	<!-- List<CartVO> findByUid(Integer uid); -->
+	<select id="findCartVOByUid"
+		resultType="cn.tedu.store5.entity.CartVO">
+		SELECT 
+			t_goods.image, t_goods.title,t_goods.price,t_cart.num,t_cart.gid,t_cart.uid,t_cart.cid
+		FROM
+		 	t_cart
+		 LEFT JOIN 
+			t_goods 
+		ON 
+			t_cart.gid =t_goods.id  
+		WHERE 
+			t_cart.uid=#{uid}
+		ORDER BY 
+   			 t_cart.modified_time DESC,t_cart.cid DESC;
+	</select>
+	<!-- 查询用户uid和购物车中该商品数量 -->
+	<!-- Cart findByCid(Integer cid); -->
+	<select id="findByCid"
+		resultType="cn.tedu.store5.entity.Cart">
+		select uid,num from
+		t_cart
+		where cid=#{cid};
+	</select>
+	<!-- 显示购物车中勾选的商品数据 -->
+	<!-- List<CartVO> findCartVOByCids(Integer[] cids); -->
+	<select id="findCartVOByCids"
+		resultType="cn.tedu.store5.entity.CartVO">
+		SELECT 
+			t_goods.image, t_goods.title,t_goods.price,t_cart.num,t_cart.gid,t_cart.uid,t_cart.cid
+		FROM
+		 	t_cart
+		 LEFT JOIN 
+			t_goods 
+		ON 
+			t_cart.gid =t_goods.id  
+		WHERE 
+			t_cart.cid
+		IN
+			(
+				<foreach  collection="array" item="cid" separator=",">
+					#{cid}
+				</foreach>
+			)
+		ORDER BY 
+   			 t_cart.modified_time DESC,t_cart.cid DESC;
+	</select>
+</mapper>
+
+
+
+
+
+

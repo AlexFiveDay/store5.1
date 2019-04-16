@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+	"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<!-- namespace：匹配的Java接口 -->
+<mapper namespace="cn.tedu.store5.mapper.UserMapper">
+
+	<!-- 根据将要执行的SQL语句的类型选择节点 -->
+	<!-- id：对应的抽象方法的方法名 -->
+	<!-- 在SQL语句中的?应该使用#{}来占位 -->
+	<!-- 在#{}中的名称是参数User类中的属性名 -->
+
+	<!-- 插入用户数据 -->
+	<!-- Integer insert(User user) -->
+	<select id="findByUsername"
+		resultType="cn.tedu.store5.entity.User">
+		select uid,username,password,salt,avatar,is_delete as isDelete from t_user
+		where username=#{username}
+	</select>
+	<insert id="insert">
+		insert into t_user values(
+		null,
+		#{username},
+		#{password},
+		#{salt},
+		#{gender},
+		#{phone},
+		#{email},
+		#{avatar},
+		#{isDelete},
+		#{createUser},
+		#{createTime},
+		#{modifiedUser},
+		#{modifiedTime}
+		)
+	</insert>
+	<!-- 更新用户数据 -->
+	<!-- User findByUid(Integer uid) -->
+	<select id="findByUid"
+		resultType="cn.tedu.store5.entity.User">
+		select username,avatar,email,gender,phone,password,salt,is_delete as isDelete from t_user
+		where uid=#{uid}
+	</select>
+	<update id="updatePassword">
+		update t_user set password=#{password},modified_time=#{modifiedTime},modified_user=#{modifiedUser} where uid=#{uid};
+	</update>
+	<!-- 修改用户信息 -->
+	<!-- Integer updateInfo(User user) -->
+	<update id="updateInfo">
+		update t_user set avatar=#{avatar},email=#{email},gender=#{gender},phone=#{phone},modified_time=#{modifiedTime},modified_user=#{modifiedUser} where uid=#{uid};
+	</update>
+	<!-- 修改用头像信息 -->
+	<!-- Integer updateInfo(User user) -->
+	<update id="updateAvatar">
+		update t_user set avatar=#{avatar},modified_time=#{modifiedTime},modified_user=#{modifiedUser} where uid=#{uid};
+	</update>
+</mapper>
+
+
+
+
+
+

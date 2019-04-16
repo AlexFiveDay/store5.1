@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+	"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<!-- namespace：匹配的Java接口 -->
+<mapper namespace="cn.tedu.store5.mapper.GoodsMapper">
+
+	<!-- 根据将要执行的SQL语句的类型选择节点 -->
+	<!-- id：对应的抽象方法的方法名 -->
+	<!-- 在SQL语句中的?应该使用#{}来占位 -->
+	<!-- 在#{}中的名称是参数User类中的属性名 -->
+
+	<!-- 显示热销商品 -->
+	<!-- List<Goods> findHotGoods(); -->
+	<select id="findHotGoods"
+		resultType="cn.tedu.store5.entity.Goods">
+		SELECT
+		id, title, price, image
+		FROM
+		t_goods
+		WHERE
+		status=1 AND
+		num>10
+		ORDER BY
+		priority DESC
+		LIMIT
+		0,4
+	</select>
+	<!-- 显示热销商品详情 -->
+	<!-- Goods findById(Long id); -->
+	<select id="findById" resultType="cn.tedu.store5.entity.Goods">
+		SELECT
+		image, title, sell_point, price, num, status
+		FROM
+		t_goods
+		WHERE
+		id=#{id}
+	</select>
+</mapper>
